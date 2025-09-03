@@ -88,22 +88,10 @@
     .feature h3 { margin: 8px 0 6px; font-size: 1.05rem; }
     .feature p { margin: 0; color: var(--muted); font-size: .95rem; }
 
-    .admin { margin-top: 30px; }
+    .admin-toggle { margin-top: 28px; text-align: center; }
+    .admin { margin-top: 20px; display:none; }
     .admin .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     @media (max-width: 900px){ .admin .row { grid-template-columns: 1fr; } }
-
-    .field { display: grid; gap: 8px; }
-    label { font-size: .9rem; color: var(--muted); }
-    input[type="password"], input[type="text"], input[type="file"] {
-      background: #0f1018; border: 1px solid rgba(255,255,255,.08); color: var(--text);
-      padding: 12px 12px; border-radius: 12px; outline: none;
-    }
-    input:focus { box-shadow: 0 0 0 6px var(--ring); border-color: transparent; }
-
-    .status { margin-top: 10px; font-size: .95rem; }
-    .ok { color: var(--success); }
-    .warn { color: var(--warning); }
-    .err { color: var(--danger); }
 
     footer { margin: 40px 0 18px; color: var(--muted); font-size: .9rem; text-align: center; }
     .sep { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); margin: 30px 0; }
@@ -154,7 +142,7 @@
           <span class="subtle" id="latest-version">v—</span>
         </header>
         <p class="subtle" style="margin:8px 0 16px">If the mirror is busy, try again in a minute.</p>
-        <a id="downloadBtn" class="btn" href="#" download>
+        <a id="downloadBtn" class="btn" href="https://github.com/OlaCodez1/vaura-app/releases/latest/download/vaura-v1.0.0.apk" download>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Download APK
         </a>
@@ -162,37 +150,21 @@
         <div class="sep"></div>
         <div class="subtle" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
           <span>Primary:</span>
-          <code id="primaryLink" style="white-space:nowrap; overflow:auto; max-width:100%"></code>
+          <code id="primaryLink" style="white-space:nowrap; overflow:auto; max-width:100%">https://github.com/OlaCodez1/vaura-app/releases/latest/download/vaura-v1.0.0.apk</code>
         </div>
       </div>
     </section>
 
-    <section class="admin card" style="margin-top:24px">
+    <div class="admin-toggle">
+      <button class="btn" id="toggleAdmin">Show Admin Panel</button>
+    </div>
+
+    <section class="admin card" id="adminPanel">
       <h2 style="margin:0 0 8px">Admin quick notes</h2>
       <p class="subtle" style="margin:0 0 12px">You publish new builds via <strong>GitHub Releases</strong>. No server needed.</p>
-      <div class="row">
-        <div class="field">
-          <label>GitHub username</label>
-          <input id="ghUser" type="text" placeholder="YOURNAME" />
-        </div>
-        <div class="field">
-          <label>Repository</label>
-          <input id="ghRepo" type="text" placeholder="vaura-app" />
-        </div>
-      </div>
-      <div class="row" style="margin-top:8px">
-        <div class="field">
-          <label>Asset filename in release</label>
-          <input id="assetName" type="text" placeholder="vaura.apk" />
-        </div>
-        <div class="field">
-          <label>&nbsp;</label>
-          <button class="btn" id="applyBtn" type="button">Apply settings</button>
-        </div>
-      </div>
       <p class="subtle" style="margin-top:8px">
-        When you create a new release (e.g. <code>v1.2.0</code>) and attach <code>vaura.apk</code>, the button below will automatically point to
-        <code>/releases/latest/download/vaura.apk</code>.
+        Each time you create a release and attach <code>vaura-vX.Y.Z.apk</code>, this page will always point to 
+        <code>/releases/latest/download/vaura-vX.Y.Z.apk</code>.
       </p>
     </section>
 
@@ -204,24 +176,9 @@
   <script>
     (function(){
       const $ = (sel) => document.querySelector(sel);
-      const state = {
-        user: localStorage.getItem('vaura.user') || 'YOURNAME',
-        repo: localStorage.getItem('vaura.repo') || 'vaura-app',
-        asset: localStorage.getItem('vaura.asset') || 'vaura.apk'
-      };
-
-      function buildLatestUrl(){
-        return `https://github.com/${state.user}/${state.repo}/releases/latest/download/${state.asset}`;
-      }
-
-      function applyStateToUI(){
-        $('#primaryLink').textContent = buildLatestUrl();
-        const a = $('#downloadBtn');
-        a.href = buildLatestUrl();
-      }
 
       async function probeRelease(){
-        const url = `https://api.github.com/repos/${state.user}/${state.repo}/releases/latest`;
+        const url = "https://api.github.com/repos/OlaCodez1/vaura-app/releases/latest";
         try {
           const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
           if(!res.ok) throw new Error('No release yet');
@@ -237,29 +194,20 @@
         }
       }
 
-      function saveAndApply(){
-        localStorage.setItem('vaura.user', state.user);
-        localStorage.setItem('vaura.repo', state.repo);
-        localStorage.setItem('vaura.asset', state.asset);
-        applyStateToUI();
-        probeRelease();
-      }
-
-      // Init defaults in UI
-      $('#ghUser').value = state.user;
-      $('#ghRepo').value = state.repo;
-      $('#assetName').value = state.asset;
-      applyStateToUI();
-      probeRelease();
-
-      $('#applyBtn').addEventListener('click', () => {
-        state.user = $('#ghUser').value.trim() || state.user;
-        state.repo = $('#ghRepo').value.trim() || state.repo;
-        state.asset = $('#assetName').value.trim() || state.asset;
-        saveAndApply();
+      // Admin toggle
+      $('#toggleAdmin').addEventListener('click', () => {
+        const panel = $('#adminPanel');
+        if(panel.style.display === 'none' || panel.style.display === ''){
+          panel.style.display = 'block';
+          $('#toggleAdmin').textContent = "Hide Admin Panel";
+        } else {
+          panel.style.display = 'none';
+          $('#toggleAdmin').textContent = "Show Admin Panel";
+        }
       });
 
-      // Year
+      // Init
+      probeRelease();
       $('#year').textContent = new Date().getFullYear();
     })();
   </script>
