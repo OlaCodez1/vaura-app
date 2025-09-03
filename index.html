@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vaura AI — Download</title>
+  <meta name="description" content="Download the latest Vaura AI APK from GitHub Releases." />
+  <style>
+    :root {
+      --bg: #0b0b12;
+      --panel: rgba(255,255,255,0.06);
+      --muted: #a6a8b3;
+      --text: #eef1f8;
+      --grad1: #00e1ff;
+      --grad2: #a020f0;
+      --accent: #7ce7ff;
+      --success: #62ffa1;
+      --warning: #ffd166;
+      --danger: #ff6b6b;
+      --ring: rgba(124, 231, 255, .35);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      color: var(--text); background: radial-gradient(1200px 800px at 80% -10%, #1b1b2a 0%, transparent 60%),
+                           radial-gradient(1200px 800px at -10% 110%, #131321 0%, transparent 60%),
+                           var(--bg);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0 10px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text);
+    }
+    .logo { width: 44px; height: 44px; border-radius: 12px; background:
+      conic-gradient(from 90deg, var(--grad1), var(--grad2));
+      position: relative;
+      box-shadow: 0 10px 30px rgba(160,32,240,.25), inset 0 0 20px rgba(0,225,255,.35);
+    }
+    .logo::after {
+      content: ""; position: absolute; inset: 3px; border-radius: 10px;
+      background: radial-gradient(120px 60px at 20% 10%, rgba(255,255,255,.65), transparent 45%),
+                  radial-gradient(160px 80px at 70% 80%, rgba(255,255,255,.25), transparent 55%),
+                  linear-gradient(135deg, rgba(0,0,0,.25), rgba(0,0,0,.1));
+      filter: blur(.2px);
+    }
+    .brand .title { font-weight: 700; letter-spacing: .3px; font-size: 1.1rem; }
+
+    .pill {
+      padding: 8px 12px; border-radius: 999px; background: var(--panel); color: var(--muted);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: center; padding: 28px 0 8px; }
+    @media (max-width: 900px){ .hero { grid-template-columns: 1fr; } }
+
+    h1 { font-size: clamp(2rem, 2.6rem + 1vw, 3.2rem); line-height: 1.1; margin: 0 0 10px; }
+    .gradient-text { background: linear-gradient(90deg, var(--grad1), var(--grad2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    .lead { color: var(--muted); font-size: 1.05rem; max-width: 52ch; }
+
+    .card { background: var(--panel); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 22px; backdrop-filter: blur(8px); }
+
+    .download-card header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+
+    .btn {
+      appearance: none; border: 0; cursor: pointer; text-decoration: none; color: #0b0b12; font-weight: 700; letter-spacing: .2px;
+      background: linear-gradient(90deg, var(--grad1), var(--grad2));
+      padding: 14px 18px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,225,255,.25);
+      transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 16px 40px rgba(160,32,240,.25); }
+    .btn:active { transform: translateY(0); }
+
+    .subtle { color: var(--muted); font-size: .9rem; }
+
+    .grid { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 900px){ .grid { grid-template-columns: 1fr; } }
+
+    .feature { padding: 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); }
+    .feature h3 { margin: 8px 0 6px; font-size: 1.05rem; }
+    .feature p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+    .admin { margin-top: 30px; }
+    .admin .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width: 900px){ .admin .row { grid-template-columns: 1fr; } }
+
+    .field { display: grid; gap: 8px; }
+    label { font-size: .9rem; color: var(--muted); }
+    input[type="password"], input[type="text"], input[type="file"] {
+      background: #0f1018; border: 1px solid rgba(255,255,255,.08); color: var(--text);
+      padding: 12px 12px; border-radius: 12px; outline: none;
+    }
+    input:focus { box-shadow: 0 0 0 6px var(--ring); border-color: transparent; }
+
+    .status { margin-top: 10px; font-size: .95rem; }
+    .ok { color: var(--success); }
+    .warn { color: var(--warning); }
+    .err { color: var(--danger); }
+
+    footer { margin: 40px 0 18px; color: var(--muted); font-size: .9rem; text-align: center; }
+    .sep { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); margin: 30px 0; }
+
+    .tag { display: inline-block; padding: 6px 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; color: var(--muted); font-size: .85rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="brand" href="#">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div class="title">Vaura AI</div>
+          <div class="subtle" style="margin-top:2px">Fast. Creative. Private.</div>
+        </div>
+      </a>
+      <span class="pill" id="release-pill">checking latest…</span>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>Smarter. Faster. <span class="gradient-text">Vaura</span>.</h1>
+        <p class="lead">Download the official Vaura AI APK. Hosted on GitHub Releases so you always get a clean, verifiable build.</p>
+        <div class="sep"></div>
+        <div class="grid">
+          <div class="feature">
+            <div class="tag">⚡ Speed</div>
+            <h3>Low-latency responses</h3>
+            <p>Optimized request pipeline and caching for snappy outputs.</p>
+          </div>
+          <div class="feature">
+            <div class="tag">🔒 Privacy</div>
+            <h3>Local controls</h3>
+            <p>Granular toggles and safe defaults keep your data in your hands.</p>
+          </div>
+          <div class="feature">
+            <div class="tag">🎨 Creativity</div>
+            <h3>Multimodal magic</h3>
+            <p>Write, code, summarize, and brainstorm with style.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card download-card">
+        <header>
+          <strong>Latest build</strong>
+          <span class="subtle" id="latest-version">v—</span>
+        </header>
+        <p class="subtle" style="margin:8px 0 16px">If the mirror is busy, try again in a minute.</p>
+        <a id="downloadBtn" class="btn" href="#" download>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Download APK
+        </a>
+        <div class="status" id="status">Preparing download link…</div>
+        <div class="sep"></div>
+        <div class="subtle" style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
+          <span>Primary:</span>
+          <code id="primaryLink" style="white-space:nowrap; overflow:auto; max-width:100%"></code>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin card" style="margin-top:24px">
+      <h2 style="margin:0 0 8px">Admin quick notes</h2>
+      <p class="subtle" style="margin:0 0 12px">You publish new builds via <strong>GitHub Releases</strong>. No server needed.</p>
+      <div class="row">
+        <div class="field">
+          <label>GitHub username</label>
+          <input id="ghUser" type="text" placeholder="YOURNAME" />
+        </div>
+        <div class="field">
+          <label>Repository</label>
+          <input id="ghRepo" type="text" placeholder="vaura-app" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div class="field">
+          <label>Asset filename in release</label>
+          <input id="assetName" type="text" placeholder="vaura.apk" />
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="btn" id="applyBtn" type="button">Apply settings</button>
+        </div>
+      </div>
+      <p class="subtle" style="margin-top:8px">
+        When you create a new release (e.g. <code>v1.2.0</code>) and attach <code>vaura.apk</code>, the button below will automatically point to
+        <code>/releases/latest/download/vaura.apk</code>.
+      </p>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Vaura AI · Built with ❤ for creators
+    </footer>
+  </div>
+
+  <script>
+    (function(){
+      const $ = (sel) => document.querySelector(sel);
+      const state = {
+        user: localStorage.getItem('vaura.user') || 'OlaCodez1',
+        repo: localStorage.getItem('vaura.repo') || 'vaura-app',
+        asset: localStorage.getItem('vaura.asset') || 'vaura.apk'
+      };
+
+      function buildLatestUrl(){
+        return `https://github.com/${state.user}/${state.repo}/releases/latest/download/${state.asset}`;
+      }
+
+      function applyStateToUI(){
+        $('#primaryLink').textContent = buildLatestUrl();
+        const a = $('#downloadBtn');
+        a.href = buildLatestUrl();
+      }
+
+      async function probeRelease(){
+        const url = `https://api.github.com/repos/${state.user}/${state.repo}/releases/latest`;
+        try {
+          const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
+          if(!res.ok) throw new Error('No release yet');
+          const json = await res.json();
+          const tag = json.tag_name || '—';
+          $('#latest-version').textContent = tag;
+          $('#release-pill').textContent = `Latest ${tag}`;
+          $('#status').innerHTML = `<span class="ok">Ready ·</span> Latest: <code>${tag}</code>`;
+        } catch (e) {
+          $('#latest-version').textContent = '—';
+          $('#release-pill').textContent = 'No release detected';
+          $('#status').innerHTML = '<span class="warn">No release detected yet.</span> Create one on GitHub → Releases';
+        }
+      }
+
+      function saveAndApply(){
+        localStorage.setItem('vaura.user', state.user);
+        localStorage.setItem('vaura.repo', state.repo);
+        localStorage.setItem('vaura.asset', state.asset);
+        applyStateToUI();
+        probeRelease();
+      }
+
+      // Init defaults in UI
+      $('#ghUser').value = state.user;
+      $('#ghRepo').value = state.repo;
+      $('#assetName').value = state.asset;
+      applyStateToUI();
+      probeRelease();
+
+      $('#applyBtn').addEventListener('click', () => {
+        state.user = $('#ghUser').value.trim() || state.user;
+        state.repo = $('#ghRepo').value.trim() || state.repo;
+        state.asset = $('#assetName').value.trim() || state.asset;
+        saveAndApply();
+      });
+
+      // Year
+      $('#year').textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
